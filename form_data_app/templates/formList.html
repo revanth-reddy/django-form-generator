@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form List</title>
+</head>
+<body>
+    <ul>
+    {% if not forms %}
+        No form Exists
+    {% endif %}
+    {% for form in forms %}
+        <li>
+            <a href="{% url 'record_list' form.id%}"> {{ form.title }} </a>
+        </li>
+    {% endfor %}
+    </ul>
+</body>
+</html>

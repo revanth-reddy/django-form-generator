@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Records</title>
+</head>
+<body>
+    {% if not form.records %}
+        No record exists
+    {% endif %}
+
+    {% for record in form.records %}
+        <ul>
+            <li>
+                <a href="{% url 'record' form_id=form.form_id record_id=record.id %}">
+                    {{ record.id }} - {{ record.fields.3.value }} {{ record.fields.2.value }}
+                </a>
+            </li>
+        </ul>
+    {% endfor %}
+
+    <br/>
+    <br/>
+
+    <form action="{% url 'record_list' form.form_id %}" method="POST">
+        {% csrf_token %}
+        {% for field in form.fields %}
+            {% if field.type == 'select' %}
+                <label> {{ field.title }} </label>
+                <select name="{{ field.id }}">
+                    {% for choice in field.choices %}
+                        <option value="{{ choice.value }}">
+                            {{ choice.text }}
+                        </option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <label> {{ field.title }} </label>
+                <input type="{{ field.type }}" name="{{ field.id }}" placeholder="{{ field.title }}"/>
+            {% endif %}
+            <br/>
+        {% endfor %}
+        <input type="submit" value="Add">
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Record</title>
+</head>
+<body>
+        {{ form.form_title }}
+
+        <form action="{% url 'record' form_id=form.form_id record_id=form.record_id%}" method="POST">
+            <input type="hidden" name="_method" value="PUT">
+            {% csrf_token %}
+            {% for field in form.fields %}
+                {% if field.type == 'select' %}
+                    <label> {{ field.title }} </label>
+                    <select name="{{ field.id }}">
+                        {% for choice in field.choices %}
+                            <option value="{{ choice.value }}"
+                                    {% if field.value == choice.value %}
+                                        selected
+                                    {% endif %}>
+                                {{ choice.text }} </option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    <label> {{ field.title }} </label>
+                    <input type="{{ field.type }}" name="{{ field.id }}" placeholder="{{ field.title }}" value="{{ field.value }}"/>
+                {% endif %}
+                <br/>
+            {% endfor %}
+            <input type="submit" value="Update">
+        </form>
+        <form action="{% url 'record' form_id=form.form_id record_id=form.record_id%}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="submit" value="Delete">
+        </form>
+
+</body>
+</html>
